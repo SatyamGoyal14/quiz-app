@@ -1,114 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/quiz_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D0D0D">
+    android:padding="18dp"
+    android:background="@drawable/bg_gradient_dark">
 
+    <!-- Top header: progress + counter -->
     <LinearLayout
+        android:id="@+id/topHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:orientation="vertical">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:progress="1"
+            android:max="30"
+            android:progressDrawable="@drawable/progress_quiz" />
 
         <TextView
             android:id="@+id/numberText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Question 1/30"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="20dp" />
+            android:textColor="#E6E6E6"
+            android:textSize="14sp"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+
+    <!-- Content area (centered) -->
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topHeader"
+        android:layout_marginTop="12dp">
 
         <LinearLayout
-            android:id="@+id/questionCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_dark"
-            android:padding="22dp"
-            android:elevation="14dp"
-            android:layout_marginBottom="30dp"
-            android:animation="@anim/fade_in"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/questionText"
-                android:layout_width="wrap_content"
+            <!-- Spacing to push center -->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
+            <!-- Glass question card -->
+            <LinearLayout
+                android:id="@+id/questionCard"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Question here"
-                android:textSize="22sp"
+                android:layout_margin="8dp"
+                android:padding="22dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/card_glass"
+                android:elevation="12dp"
+                android:layout_marginBottom="20dp"
+                android:animateLayoutChanges="true"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp">
+
+                <TextView
+                    android:id="@+id/questionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Question goes here"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Options -->
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/optionA"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:background="@drawable/radio_option_glass"
+                    android:padding="14dp"
+                    android:text="Option A"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp" />
+
+                <RadioButton
+                    android:id="@+id/optionB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:background="@drawable/radio_option_glass"
+                    android:padding="14dp"
+                    android:text="Option B"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp" />
+
+                <RadioButton
+                    android:id="@+id/optionC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:background="@drawable/radio_option_glass"
+                    android:padding="14dp"
+                    android:text="Option C"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp" />
+
+                <RadioButton
+                    android:id="@+id/optionD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:background="@drawable/radio_option_glass"
+                    android:padding="14dp"
+                    android:text="Option D"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="10dp" />
+            </RadioGroup>
+
+            <!-- Next button -->
+            <Button
+                android:id="@+id/nextBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:textSize="16sp"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:gravity="center" />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_neon"
+                android:elevation="12dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
         </LinearLayout>
+    </ScrollView>
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-
-            <RadioButton
-                android:id="@+id/optionA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/radio_option_dark"
-                android:padding="15dp"
-                android:textSize="18sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginBottom="12dp" />
-
-            <RadioButton
-                android:id="@+id/optionB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/radio_option_dark"
-                android:padding="15dp"
-                android:textSize="18sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginBottom="12dp" />
-
-            <RadioButton
-                android:id="@+id/optionC"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/radio_option_dark"
-                android:padding="15dp"
-                android:textSize="18sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginBottom="12dp" />
-
-            <RadioButton
-                android:id="@+id/optionD"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/radio_option_dark"
-                android:padding="15dp"
-                android:textSize="18sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginBottom="12dp" />
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/nextBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Next"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:padding="14dp"
-            android:layout_marginTop="35dp"
-            android:background="@drawable/btn_blue"
-            android:elevation="12dp" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="50dp" />
-    </LinearLayout>
-</ScrollView>
+</RelativeLayout>

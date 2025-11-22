@@ -1,11 +1,17 @@
 package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,9 +21,9 @@ public class QuizActivity extends AppCompatActivity {
     RadioGroup optionsGroup;
     RadioButton optA, optB, optC, optD;
     Button nextBtn;
+    ProgressBar progressBar;
 
-    List<QuestionModel> quizQuestions;
-
+    List<QuestionModel> quizQuestions = new ArrayList<>();
     int index = 0, score = 0;
 
     @Override
@@ -25,7 +31,6 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        // UI Hooks
         questionText = findViewById(R.id.questionText);
         numberText = findViewById(R.id.numberText);
         optionsGroup = findViewById(R.id.radioGroup);
@@ -36,18 +41,9 @@ public class QuizActivity extends AppCompatActivity {
         optD = findViewById(R.id.optionD);
 
         nextBtn = findViewById(R.id.nextBtn);
+        progressBar = findViewById(R.id.progressBar);
 
-        // Load questions from CSV uploaded in MainActivity
-        if (MainActivity.questionBank.size() < 30) {
-            Toast.makeText(this, "Not enough questions! Upload CSV first.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
-        // Randomize question order
         Collections.shuffle(MainActivity.questionBank);
-
-        // Pick first 30
         quizQuestions = MainActivity.questionBank.subList(0, 30);
 
         loadQuestion();
@@ -55,10 +51,25 @@ public class QuizActivity extends AppCompatActivity {
         nextBtn.setOnClickListener(view -> checkAnswer());
     }
 
+
+    // ⭐ Smooth Animated Progress Bar ⭐
+    private void animateProgressBar(int from, int to) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", from, to);
+        animation.setDuration(500);
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
+        animation.start();
+    }
+
+
     private void loadQuestion() {
         QuestionModel q = quizQuestions.get(index);
 
         numberText.setText("Question " + (index + 1) + "/30");
+
+        // animate progress
+        int oldProgress = progressBar.getProgress();
+        int newProgress = index + 1;
+        animateProgressBar(oldProgress, newProgress);
 
         questionText.setText(q.getQuestion());
         optA.setText(q.getOptionA());
@@ -66,11 +77,17 @@ public class QuizActivity extends AppCompatActivity {
         optC.setText(q.getOptionC());
         optD.setText(q.getOptionD());
 
+        // Clear previous selection
         optionsGroup.clearCheck();
+
+        // Fade in question card smoothly
+        View card = findViewById(R.id.questionCard);
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        card.startAnimation(a);
     }
 
-    private void checkAnswer() {
 
+    private void checkAnswer() {
         int selectedId = optionsGroup.getCheckedRadioButtonId();
 
         if (selectedId == -1) {
@@ -80,7 +97,8 @@ public class QuizActivity extends AppCompatActivity {
 
         RadioButton selected = findViewById(selectedId);
 
-        if (selected.getText().toString().equals(quizQuestions.get(index).getCorrectAns())) {
+        if (selected.getText().toString()
+                .equals(quizQuestions.get(index).getCorrectAns())) {
             score++;
         }
 

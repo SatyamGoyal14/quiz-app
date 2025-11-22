@@ -2,39 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="30dp"
-    android:background="#0D0D0D">
+    android:gravity="center"
+    android:padding="28dp"
+    android:background="@drawable/bg_gradient_neon">
 
-    <TextView
-        android:id="@+id/scoreText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your Score: 0/30"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="26sp"
-        android:layout_marginBottom="20dp" />
+    <!-- Medal Circle -->
+    <FrameLayout
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:background="@drawable/medal_circle"
+        android:layout_gravity="center"
+        android:elevation="12dp">
 
+        <TextView
+            android:id="@+id/scoreText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0/30"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textColor="#FFFFFF"/>
+    </FrameLayout>
+
+    <!-- Message below score -->
     <TextView
         android:id="@+id/messageText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Result"
-        android:textColor="#AAAAAA"
+        android:text="Your performance"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:layout_marginBottom="35dp" />
+        android:layout_marginTop="20dp"
+        android:gravity="center"/>
 
+    <!-- Restart button -->
     <Button
         android:id="@+id/restartBtn"
-        android:layout_width="250dp"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:text="Restart Quiz"
-        android:textSize="18sp"
         android:textColor="#FFFFFF"
-        android:padding="14dp"
-        android:background="@drawable/btn_start"
-        android:elevation="10dp" />
+        android:textSize="18sp"
+        android:background="@drawable/btn_primary"
+        android:layout_marginTop="30dp"
+        android:elevation="10dp"/>
 
 </LinearLayout>
