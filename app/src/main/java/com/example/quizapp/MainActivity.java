@@ -1,10 +1,14 @@
 package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -15,7 +19,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     Button startQuizBtn, uploadCsvBtn;
-
     public static ArrayList<QuestionModel> questionBank = new ArrayList<>();
 
     private static final int PICK_CSV = 101;
@@ -23,7 +26,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 🔐 LOGIN CHECK: If user is NOT logged in → go to LoginActivity
+        SharedPreferences prefs = getSharedPreferences("QuizAppPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
+
+        if (!isLoggedIn) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
+
+        // 🌈 Optional: Animated background if your layout uses it
+        LinearLayout root = findViewById(R.id.mainRoot);
+        if (root != null && root.getBackground() instanceof AnimationDrawable) {
+            AnimationDrawable anim = (AnimationDrawable) root.getBackground();
+            anim.setEnterFadeDuration(1500);
+            anim.setExitFadeDuration(1500);
+            anim.start();
+        }
 
         startQuizBtn = findViewById(R.id.startQuizBtn);
         uploadCsvBtn = findViewById(R.id.uploadCsvBtn);
@@ -54,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
                 return;
             }
-
             startActivity(new Intent(MainActivity.this, QuizActivity.class));
         });
     }
@@ -77,10 +99,12 @@ public class MainActivity extends AppCompatActivity {
             questionBank.clear();
             String line;
 
-            reader.readLine(); // skip header
+            reader.readLine(); // Skip header row
 
             while ((line = reader.readLine()) != null) {
-                String[] cols = line.split(",");
+
+                // Fix CSV splitting to handle commas safely
+                String[] cols = line.split(",", -1);
 
                 if (cols.length == 6) {
                     questionBank.add(new QuestionModel(
@@ -100,12 +124,13 @@ public class MainActivity extends AppCompatActivity {
                     "CSV Imported Successfully! Loaded: " + questionBank.size() + " questions",
                     Toast.LENGTH_LONG).show();
 
-            // Enable StartQuiz after CSV is loaded
             startQuizBtn.setEnabled(true);
             startQuizBtn.setAlpha(1f);
 
         } catch (Exception e) {
-            Toast.makeText(this, "Error loading CSV file!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Error loading CSV file! Please check format.",
+                    Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

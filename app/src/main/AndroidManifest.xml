@@ -2,15 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ==== REQUIRED FOR CSV FILE ACCESS ON ANDROID 11+ ==== -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Needed for file picking from storage / file manager -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <!-- For Android 13+ (allows reading any file type the user selects) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-
-    <!-- Optional but helps in some phones for file manager access -->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
 
     <application
         android:allowBackup="true"
@@ -22,9 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quizapp">
 
-        <!-- MAIN ACTIVITY -->
+        <!-- LOGIN: Launcher Activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,10 +31,16 @@
             </intent-filter>
         </activity>
 
-        <!-- QUIZ ACTIVITY (YOU FORGOT TO ADD THIS) -->
+        <!-- SIGNUP Activity -->
+        <activity android:name=".SignupActivity" />
+
+        <!-- MAIN Activity (after login) -->
+        <activity android:name=".MainActivity" />
+
+        <!-- QUIZ Activity -->
         <activity android:name=".QuizActivity" />
 
-        <!-- RESULT ACTIVITY (ALSO REQUIRED) -->
+        <!-- RESULT Activity -->
         <activity android:name=".ResultActivity" />
 
     </application>
